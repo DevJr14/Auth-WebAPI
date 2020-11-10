@@ -35,6 +35,7 @@ namespace WebAPI
             options.UseSqlServer(
                     Configuration.GetConnectionString("DevConnectionOne")));
 
+            //Service to extend User table with custom field(s) from AppUser
             services.AddDefaultIdentity<AppUser>()
                 .AddEntityFrameworkStores<AuthDbContext>();
 
