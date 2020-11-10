@@ -10,8 +10,8 @@ using WebAPI.Models;
 namespace WebAPI.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20201106135515_First")]
-    partial class First
+    [Migration("20201107135252_New Db on new Machine")]
+    partial class NewDbonnewMachine
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

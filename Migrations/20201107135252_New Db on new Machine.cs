@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WebAPI.Migrations
 {
-    public partial class First : Migration
+    public partial class NewDbonnewMachine : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
