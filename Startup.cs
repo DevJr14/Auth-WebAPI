@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -11,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using WebAPI.Models;
 
 namespace WebAPI
@@ -39,11 +41,25 @@ namespace WebAPI
             services.AddCors();
 
             //JWT Authentication
-
-            services.AddAuthentication(auth  =>
+            var key = Encoding.UTF8.GetBytes(Configuration["AppSettings:JWT_Secret"].ToString());
+            services.AddAuthentication(auth =>
             {
                 auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
+                auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                auth.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(jwtb =>
+            {
+                jwtb.RequireHttpsMetadata = false;
+                jwtb.SaveToken = false;
+                jwtb.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,7 +71,7 @@ namespace WebAPI
             }
 
             app.UseCors(builder =>
-            builder.WithOrigins("http://localhost:4200")
+            builder.WithOrigins(Configuration["AppSettings:Client_App_Url"].ToString())
             .AllowAnyHeader()
             .AllowAnyMethod());
 
