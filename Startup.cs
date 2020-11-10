@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -36,6 +37,13 @@ namespace WebAPI
                 .AddEntityFrameworkStores<AuthDbContext>();
 
             services.AddCors();
+
+            //JWT Authentication
+
+            services.AddAuthentication(auth  =>
+            {
+                auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
